@@ -5,7 +5,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import axios from "axios";
 import { css, keyframes } from "@emotion/react";
 
-// אנימציה של כניסה
+// אנימציית כניסה להודעות
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -24,8 +24,10 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
-  const userImageUrl = "https://scontent.ftlv1-1.fna.fbcdn.net/v/t39.30808-6/466670338_10234481534240949_4148709394472925320_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=i-KCFnAZhloQ7kNvgG30Eqk&_nc_zt=23&_nc_ht=scontent.ftlv1-1.fna&_nc_gid=AUTAtBK6JCQnCVm_H95E0XP&oh=00_AYAmGC__l90Z6osyMshxMCAiZNhkrg5Hj-pvG4NPtjefnQ&oe=677A1BB1";
-  const aiImageUrl = "https://scontent.ftlv1-1.fna.fbcdn.net/v/t39.30808-6/461761309_122117399540476224_5786653809398707658_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=W2orhqzfUBoQ7kNvgEyB5-Z&_nc_zt=23&_nc_ht=scontent.ftlv1-1.fna&_nc_gid=AjBKvP8da7aopj9P-mfxrFm&oh=00_AYDd_L5NWt32cm5CR0BorU6Er3APxJlYZuFsRDXQDErvqw&oe=677A2A15";
+  const userImageUrl =
+    "https://scontent.ftlv1-1.fna.fbcdn.net/v/t39.30808-6/466670338_10234481534240949_4148709394472925320_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=i-KCFnAZhloQ7kNvgG30Eqk&_nc_zt=23&_nc_ht=scontent.ftlv1-1.fna&_nc_gid=AUTAtBK6JCQnCVm_H95E0XP&oh=00_AYAmGC__l90Z6osyMshxMCAiZNhkrg5Hj-pvG4NPtjefnQ&oe=677A1BB1";
+  const aiImageUrl =
+    "https://scontent.ftlv1-1.fna.fbcdn.net/v/t39.30808-6/461761309_122117399540476224_5786653809398707658_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=W2orhqzfUBoQ7kNvgEyB5-Z&_nc_zt=23&_nc_ht=scontent.ftlv1-1.fna&_nc_gid=AjBKvP8da7aopj9P-mfxrFm&oh=00_AYDd_L5NWt32cm5CR0BorU6Er3APxJlYZuFsRDXQDErvqw&oe=677A2A15";
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -87,26 +89,40 @@ const ChatPage = () => {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        height: "100vh",
-        padding: 2,
-        backgroundColor: "#f5f5f5",
+        height: "95vh",
+        backgroundColor: "#f0f4f8",
       }}
     >
-      <Typography variant="h4" gutterBottom>
-        AI Assistant Chat
-      </Typography>
+      {/* כותרת עמוד */}
+      <Box
+        sx={{
+          width: "100%",
+          padding: "20px",
+          textAlign: "center",
+          backgroundColor: "#1976d2",
+          color: "white",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+        }}
+      >
+        <Typography variant="h4" fontWeight="bold">
+          AI Assistant Chat
+        </Typography>
+      </Box>
+
+      {/* אזור ההודעות */}
       <Paper
         ref={chatContainerRef}
         sx={{
-          width: "100%",
+          width: "90%",
           maxWidth: 600,
-          height: "70%",
+          height: "65%",
           overflowY: "auto",
           padding: 2,
-          marginBottom: 2,
-          position: "relative",
+          marginY: 2,
+          borderRadius: 4,
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          backgroundColor: "white",
         }}
-        elevation={3}
       >
         {messages.map((message, index) => (
           <Box
@@ -129,16 +145,19 @@ const ChatPage = () => {
                   marginRight: 1,
                   width: 40,
                   height: 40,
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                 }}
               />
             )}
             <Box
               sx={{
                 maxWidth: "70%",
-                padding: 1,
-                borderRadius: 1,
+                padding: 1.5,
+                borderRadius: 2,
                 backgroundColor: message.sender === "user" ? "#1976d2" : "#e0e0e0",
                 color: message.sender === "user" ? "white" : "black",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                fontSize: "14px",
               }}
             >
               {message.text}
@@ -151,28 +170,29 @@ const ChatPage = () => {
                   marginLeft: 1,
                   width: 40,
                   height: 40,
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                 }}
               />
             )}
           </Box>
         ))}
         <div ref={messagesEndRef} />
-        {showScrollButton && (
-          <Fab
-            color="primary"
-            size="small"
-            onClick={scrollToBottom}
-            sx={{
-              position: "absolute",
-              bottom: 16,
-              right: 16,
-            }}
-          >
-            <KeyboardArrowDownIcon />
-          </Fab>
-        )}
       </Paper>
-      <Box sx={{ display: "flex", width: "100%", maxWidth: 600 }}>
+
+      {/* תיבת טקסט להזנת הודעות */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          width: "90%",
+          maxWidth: 600,
+          marginBottom: 2,
+          backgroundColor: "white",
+          borderRadius: 4,
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          padding: 1,
+        }}
+      >
         <TextField
           fullWidth
           variant="outlined"
@@ -180,10 +200,21 @@ const ChatPage = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "20px",
+            },
+          }}
         />
         <Button
           variant="contained"
-          sx={{ marginLeft: 1 }}
+          sx={{
+            marginLeft: 1,
+            borderRadius: "20px",
+            paddingX: 3,
+            fontWeight: "bold",
+            backgroundColor: "#1976d2",
+          }}
           onClick={sendMessage}
         >
           Send

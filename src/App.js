@@ -8,18 +8,16 @@ import ChatPage from "./pages/ChatPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Navbar from "./components/Navbar";
+import { UserProvider } from "./UserContext";
 
 
 
 const App = () => {
   return (
-    
+    <UserProvider>
     <Router>
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <Link to="/login" style={{ margin: "0 10px" }}>Login</Link>
-        <Link to="/register" style={{ margin: "0 10px" }}>Register</Link>
-        <Link to="/dashboard" style={{ margin: "0 10px" }}>Dashboard</Link>
-      </div>
+    <Navbar />
       <Routes>
 
       <Route path="/login" element={<Login />} />
@@ -34,6 +32,7 @@ const App = () => {
 
       </Routes>
     </Router>
+    </UserProvider>
   );
 };
 

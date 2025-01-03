@@ -4,7 +4,7 @@ import axios from "axios";
 const Register = () => {
   const [formData, setFormData] = useState({
     email: "",
-    username: "",
+    phone: "",
     password: "",
     firstName: "",
     lastName: "",
@@ -21,7 +21,7 @@ const Register = () => {
     try {
       const response = await axios.post("http://127.0.0.1:8000/users/register", {
         email: formData.email,
-        username: formData.username,
+        phone: formData.phone,
         password: formData.password,
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -55,9 +55,9 @@ const Register = () => {
         <div>
           <input
             type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
+            name="phone"
+            placeholder="phone"
+            value={formData.phone}
             onChange={handleChange}
             required
             style={{ width: "100%", padding: "10px", marginBottom: "10px" }}

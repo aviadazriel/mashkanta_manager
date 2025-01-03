@@ -151,6 +151,7 @@ const ChatPage = () => {
             )}
             <Box
               sx={{
+                direction:"rtl",
                 maxWidth: "70%",
                 padding: 1.5,
                 borderRadius: 2,
@@ -158,6 +159,8 @@ const ChatPage = () => {
                 color: message.sender === "user" ? "white" : "black",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 fontSize: "14px",
+                whiteSpace: "pre-wrap", // שמירה על פורמט שורות ורווחים
+                wordWrap: "break-word", // מניעת גלישה מחוץ לקופסה
               }}
             >
               {message.text}
@@ -181,31 +184,35 @@ const ChatPage = () => {
 
       {/* תיבת טקסט להזנת הודעות */}
       <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "90%",
-          maxWidth: 600,
-          marginBottom: 2,
-          backgroundColor: "white",
-          borderRadius: 4,
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          padding: 1,
-        }}
-      >
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Type your message..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "20px",
-            },
-          }}
-        />
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    width: "90%",
+    maxWidth: 600,
+    marginBottom: 2,
+    backgroundColor: "white",
+    borderRadius: 4,
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    padding: 1,
+  }}
+>
+  <TextField
+    fullWidth
+    variant="outlined"
+    multiline // מאפשר שורות מרובות
+    maxRows={4} // גובה מקסימלי ל-4 שורות
+    placeholder="Type your message..."
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    onKeyDown={handleKeyDown}
+    sx={{
+      "& .MuiOutlinedInput-root": {
+        borderRadius: "20px",
+      },
+    }}
+  />
+
+
         <Button
           variant="contained"
           sx={{

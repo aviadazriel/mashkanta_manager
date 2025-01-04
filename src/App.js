@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
 import { UserProvider } from "./UserContext";
+import VerifyPhone from "./pages/VerifyPhone";
 
 
 
@@ -19,7 +20,7 @@ const App = () => {
     <Router>
     <Navbar />
       <Routes>
-
+      <Route path="/verify-phone" element={<VerifyPhone />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />

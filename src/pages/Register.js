@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const Register = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,8 +29,9 @@ const Register = () => {
         last_name: formData.lastName,
       });
 
-      setSuccess("Registration successful! Please login.");
+      setSuccess("Registration successful! Verification code sent.");
       setError("");
+      navigate("/verify-phone", { state: { phone: formData.phone, email: formData.email } });
     } catch (err) {
       setError("Error occurred during registration.");
       setSuccess("");

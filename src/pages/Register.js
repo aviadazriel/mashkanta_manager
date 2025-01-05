@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,34 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const navigate = useNavigate();
+  const clientId = "1040890287209-6ei904rpmlpsp7m3gs42eietl4e3pn3h.apps.googleusercontent.com";
+  const onSuccess = async (credentialResponse) => {
+    try {
+      // Send the Google credential token to your FastAPI backend
+      const response = await axios.post("http://127.0.0.1:8000/users/google-login", {
+        token: credentialResponse.credential,
+      });
+
+      // Save the access token and navigate to the dashboard
+      localStorage.setItem("token", response.data.access_token);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error logging in with Google:", error.response?.data);
+    }
+  };
+
+  const onError = () => {
+    console.error("Google Login Failed");
+  };
+
+
+
+
+
+
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,6 +126,12 @@ const Register = () => {
             style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
           />
         </div>
+        <GoogleOAuthProvider clientId={clientId}>
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <h2>Login with Google</h2>
+        <GoogleLogin onSuccess={onSuccess} onError={onError} />
+      </div>
+    </GoogleOAuthProvider>
         <button
           type="submit"
           style={{

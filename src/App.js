@@ -13,6 +13,7 @@ import { UserProvider } from "./UserContext";
 import VerifyPhone from "./pages/VerifyPhone";
 import ResetPassword from "./components/ResetPassword";
 import ResetPasswordForm from "./components/ResetPasswordForm";
+import UserSettings from "./pages/UserSettings";
 
 
 
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
+        <Route path="/user-settings" element={<UserSettings />} />
 
       </Routes>
     </Router>

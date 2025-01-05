@@ -50,6 +50,10 @@ const HomePage = () => {
 >
   AI Chat Assistant
 </Button>
+
+<Button color="inherit" component={Link} to="/user-settings">
+          User Settings
+        </Button>
       </Box>
     </Box>
   );

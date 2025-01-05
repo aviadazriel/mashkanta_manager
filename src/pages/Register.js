@@ -2,6 +2,16 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Alert,
+  Divider,
+  Card,
+  CardContent,
+} from "@mui/material";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,43 +24,37 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
   const navigate = useNavigate();
-  const clientId = "1040890287209-6ei904rpmlpsp7m3gs42eietl4e3pn3h.apps.googleusercontent.com";
+
+  // Google Login Success Handler
   const onSuccess = async (credentialResponse) => {
     try {
-      // Send the Google credential token to your FastAPI backend
       const response = await axios.post("http://127.0.0.1:8000/users/google-login", {
         token: credentialResponse.credential,
       });
 
-      // Save the access token and navigate to the dashboard
       localStorage.setItem("token", response.data.access_token);
       navigate("/dashboard");
     } catch (error) {
-      console.error("Error logging in with Google:", error.response?.data);
+      setError("Error logging in with Google.");
     }
   };
 
+  // Google Login Error Handler
   const onError = () => {
-    console.error("Google Login Failed");
+    setError("Google Login Failed.");
   };
 
-
-
-
-
-
-
-
-
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  // Use the client ID from environment variables
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:8000/users/register", {
+      await axios.post("http://127.0.0.1:8000/users/register", {
         email: formData.email,
         phone: formData.phone,
         password: formData.password,
@@ -68,85 +72,111 @@ const Register = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", textAlign: "center" }}>
-      <h2>Register</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            name="phone"
-            placeholder="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            value={formData.firstName}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            value={formData.lastName}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-          />
-        </div>
-        <GoogleOAuthProvider clientId={clientId}>
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <h2>Login with Google</h2>
-        <GoogleLogin onSuccess={onSuccess} onError={onError} />
-      </div>
-    </GoogleOAuthProvider>
-        <button
-          type="submit"
-          style={{
+    <GoogleOAuthProvider clientId={clientId}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          backgroundColor: "#f4f6f8",
+          padding: "20px",
+        }}
+      >
+        <Card
+          sx={{
+            maxWidth: "400px",
             width: "100%",
-            padding: "10px",
-            backgroundColor: "#1976d2",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            borderRadius: "12px",
           }}
         >
-          Register
-        </button>
-      </form>
-    </div>
+          <CardContent>
+            <Typography variant="h4" textAlign="center" gutterBottom>
+              Register
+            </Typography>
+
+            {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+            {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                margin="normal"
+              />
+              <TextField
+                fullWidth
+                label="Phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                margin="normal"
+              />
+              <TextField
+                fullWidth
+                label="First Name"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                margin="normal"
+              />
+              <TextField
+                fullWidth
+                label="Last Name"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                margin="normal"
+              />
+              <TextField
+                fullWidth
+                type="password"
+                label="Password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                margin="normal"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2, backgroundColor: "#1976d2" }}
+              >
+                Register
+              </Button>
+            </form>
+
+            <Divider sx={{ my: 3 }}>Or</Divider>
+
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <GoogleLogin
+                onSuccess={onSuccess}
+                onError={onError}
+                theme="filled_blue"
+                shape="pill"
+                text="continue_with"
+                style={{ marginTop: "20px",  width: "400px", textAlign: "center",  height: "40px",}}
+              />
+            </Box>
+
+            <Typography variant="body2" sx={{ mt: 3, textAlign: "center" }}>
+              Already have an account?{" "}
+              <a href="/login" style={{ color: "#1976d2", textDecoration: "none" }}>
+                Login here
+              </a>
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
+    </GoogleOAuthProvider>
   );
 };
 

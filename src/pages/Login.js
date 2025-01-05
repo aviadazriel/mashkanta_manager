@@ -1,81 +1,122 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-// Inside Login component
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { Box, Button, TextField, Typography, Alert, Divider } from "@mui/material";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:8000/users/login?username=asd&password=dfsdf", {
-        username: formData.email, // FastAPI uses "username" for login
+      const response = await axios.post("http://127.0.0.1:8000/users/login", {
+        username: formData.email,
         password: formData.password,
-      } ,{headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      }}
-    );
+      }, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
 
       localStorage.setItem("token", response.data.access_token);
-      setSuccess("Login successful!");
-      setError("");
-      navigate("/dashboard"); // Redirect to dashboard
+      navigate("/dashboard");
     } catch (err) {
       setError("Invalid email or password.");
     }
   };
 
+  const onSuccess = async (credentialResponse) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/users/google-login", {
+        token: credentialResponse.credential,
+      });
+
+      localStorage.setItem("token", response.data.access_token);
+      navigate("/dashboard");
+    } catch (error) {
+      setError("Error logging in with Google.");
+    }
+  };
+
+  const onError = () => {
+    setError("Google Login Failed.");
+  };
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", textAlign: "center" }}>
-      <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
+    <GoogleOAuthProvider clientId={clientId}>
+      <Box
+        sx={{
+          maxWidth: "400px",
+          margin: "auto",
+          mt: 5,
+          padding: "20px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          borderRadius: "10px",
+          backgroundColor: "white",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          Login
+        </Typography>
+
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+        <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            label="Email"
             name="email"
-            placeholder="Email"
             value={formData.email}
             onChange={handleChange}
             required
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
+            margin="normal"
           />
-        </div>
-        <div>
-          <input
+          <TextField
+            fullWidth
             type="password"
+            label="Password"
             name="password"
-            placeholder="Password"
             value={formData.password}
             onChange={handleChange}
             required
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
+            margin="normal"
           />
-        </div>
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            backgroundColor: "#1976d2",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-          }}
-        >
-          Login
-        </button>
-      </form>
-    </div>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2, backgroundColor: "#1976d2" }}
+          >
+            Login
+          </Button>
+        </form>
+
+        <Divider sx={{ my: 2 }}>Or</Divider>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <GoogleLogin
+          onSuccess={onSuccess}
+          onError={onError}
+          theme="filled_blue"
+          shape="pill"
+          text="continue_with"
+          style={{ marginTop: "20px",  width: "400px", textAlign: "center",  height: "40px", }}
+        />
+         </Box>
+
+        <Typography variant="body2" sx={{ mt: 3, color: "gray" }}>
+          Don't have an account? <a href="/register" style={{ color: "#1976d2" }}>Register here</a>
+        </Typography>
+      </Box>
+    </GoogleOAuthProvider>
   );
 };
 

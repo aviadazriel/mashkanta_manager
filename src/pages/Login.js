@@ -100,20 +100,36 @@ const Login = () => {
           </Button>
         </form>
 
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          <a
+            href="/reset-password"
+            style={{ color: "#1976d2", textDecoration: "none" }}
+          >
+            Forgot Password?
+          </a>
+        </Typography>
+
         <Divider sx={{ my: 2 }}>Or</Divider>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-        <GoogleLogin
-          onSuccess={onSuccess}
-          onError={onError}
-          theme="filled_blue"
-          shape="pill"
-          text="continue_with"
-          style={{ marginTop: "20px",  width: "400px", textAlign: "center",  height: "40px", }}
-        />
-         </Box>
+          <GoogleLogin
+            onSuccess={onSuccess}
+            onError={onError}
+            theme="filled_blue"
+            shape="pill"
+            text="continue_with"
+            style={{
+              marginTop: "20px",
+              width: "240px",
+              height: "40px",
+            }}
+          />
+        </Box>
 
         <Typography variant="body2" sx={{ mt: 3, color: "gray" }}>
-          Don't have an account? <a href="/register" style={{ color: "#1976d2" }}>Register here</a>
+          Don't have an account?{" "}
+          <a href="/register" style={{ color: "#1976d2", textDecoration: "none" }}>
+            Register here
+          </a>
         </Typography>
       </Box>
     </GoogleOAuthProvider>

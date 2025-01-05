@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
 import { UserProvider } from "./UserContext";
 import VerifyPhone from "./pages/VerifyPhone";
+import ResetPassword from "./components/ResetPassword";
+import ResetPasswordForm from "./components/ResetPasswordForm";
 
 
 
@@ -29,7 +31,8 @@ const App = () => {
         <Route path="/articles" element={<ArticlesPage />} />
         <Route path="/news" element={<NewsPage />} />
         <Route path="/chat" element={<ChatPage />} />
-
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
 
       </Routes>
     </Router>

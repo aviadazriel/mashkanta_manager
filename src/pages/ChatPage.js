@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, useEffect, useRef } from "react";
-import { Box, TextField, Button, Typography, Paper, Avatar, Fab } from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Box, TextField, Button, Typography, Paper, Avatar } from "@mui/material";
 import axios from "axios";
 import { css, keyframes } from "@emotion/react";
 
@@ -20,7 +19,6 @@ const fadeIn = keyframes`
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [showScrollButton, setShowScrollButton] = useState(false);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
@@ -37,22 +35,7 @@ const ChatPage = () => {
     scrollToBottom();
   }, [messages]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const container = chatContainerRef.current;
-      if (container) {
-        const isAtBottom =
-          container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
-        setShowScrollButton(!isAtBottom);
-      }
-    };
 
-    const container = chatContainerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-      return () => container.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
 
   const sendMessage = async () => {
     if (!input.trim()) return;

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { Box, Button, TextField, Typography, Alert, Divider } from "@mui/material";
+import axiosInstance from "../api/axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -16,7 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:8000/users/login", {
+      const response = await axiosInstance.post("/users/login", {
         username: formData.email,
         password: formData.password,
       }, {
@@ -34,7 +34,7 @@ const Login = () => {
 
   const onSuccess = async (credentialResponse) => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/users/google-login", {
+      const response = await axiosInstance.post("/users/google-login", {
         token: credentialResponse.credential,
       });
 

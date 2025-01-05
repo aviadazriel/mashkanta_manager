@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import axiosInstance from "../api/axios";
+
 import {
   Box,
   Button,
@@ -29,7 +30,7 @@ const Register = () => {
   // Google Login Success Handler
   const onSuccess = async (credentialResponse) => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/users/google-login", {
+      const response = await axiosInstance.post("/users/google-login", {
         token: credentialResponse.credential,
       });
 
@@ -54,7 +55,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://127.0.0.1:8000/users/register", {
+      await axiosInstance.post("/users/register", {
         email: formData.email,
         phone: formData.phone,
         password: formData.password,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Box, Button, TextField, Typography, Avatar, Alert } from "@mui/material";
+import axiosInstance from "../api/axios";
 
 const UserSettings = () => {
   const [userData, setUserData] = useState({
@@ -21,7 +21,7 @@ const UserSettings = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://127.0.0.1:8000/users/me", {
+        const response = await axiosInstance.get("/users/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -70,7 +70,7 @@ const UserSettings = () => {
         formData.append("profileImage", selectedImage);
       }
 
-      await axios.put("http://127.0.0.1:8000/users/update", formData, {
+      await axiosInstance.put("/users/update", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

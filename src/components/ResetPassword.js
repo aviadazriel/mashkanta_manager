@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Box, Button, TextField, Typography, Alert } from "@mui/material";
+import axiosInstance from "../api/axios";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -9,7 +9,7 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://127.0.0.1:8000/users/reset-password", { email });
+      await axiosInstance.post("/users/reset-password", { email });
       setMessage("If this email is registered, a password reset link will be sent.");
     } catch (err) {
       setMessage("An error occurred. Please try again.");

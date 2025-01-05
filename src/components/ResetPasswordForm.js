@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography, Alert } from "@mui/material";
 
@@ -41,7 +41,7 @@ const ResetPasswordForm = () => {
 
     try {
       // Send the request to the backend
-      await axios.post(`http://127.0.0.1:8000/users/reset-new-password`, {
+      await axiosInstance.post(`/users/reset-new-password`, {
         new_password: newPassword,
         token: token,
       });

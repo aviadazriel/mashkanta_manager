@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
-import axios from "axios";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/axios";
 
 const Dashboard = () => {
   const { user, setUser } = useContext(UserContext);
@@ -16,7 +16,7 @@ const Dashboard = () => {
       }
 
       try {
-        const response = await axios.get("http://127.0.0.1:8000/users/me", {
+        const response = await axiosInstance.get("/users/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

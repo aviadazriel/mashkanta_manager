@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../api/axios";
+
 
 const VerifyPhone = () => {
   const location = useLocation();
@@ -22,7 +23,7 @@ const VerifyPhone = () => {
     const verificationCode = code.join("");
 
     try {
-        await axios.post(`http://127.0.0.1:8000/users/verify-phone?phone=${phone}&code=${verificationCode}`);
+        await axiosInstance.post(`/users/verify-phone?phone=${phone}&code=${verificationCode}`);
         setSuccess("Phone number verified successfully!");
       setError("");
       navigate("/login");

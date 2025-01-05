@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, useEffect, useRef } from "react";
 import { Box, TextField, Button, Typography, Paper, Avatar } from "@mui/material";
-import axios from "axios";
+import axiosInstance from "../api/axios";
+
 import { css, keyframes } from "@emotion/react";
 
 // אנימציית כניסה להודעות
@@ -45,7 +46,7 @@ const ChatPage = () => {
     setInput("");
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/chat", {
+      const response = await axiosInstance.post("/chat", {
         message: input,
       });
 
